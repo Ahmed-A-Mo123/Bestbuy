@@ -16,13 +16,17 @@ class Store:
             print("That product doesn't exist")
 
     def get_total_quantity(self):
-        return len(self.product_list)
+        item_counter = 0
+        for i in self.product_list:
+            item_counter += i.get_quantity()
+        return item_counter
 
     def get_all_products(self):
-        active_list = [i for i in self.product_list if i.is_active() == True]
+        active_list = [i for i in self.product_list if i.is_active() is True]
         return active_list
 
-    def order(self, shopping_list):
+    @staticmethod
+    def order(shopping_list):
         total = 0
         for product, quantity_order in shopping_list:
             try:

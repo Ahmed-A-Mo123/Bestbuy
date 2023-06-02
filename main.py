@@ -3,11 +3,11 @@ import products
 import sys
 import promotions
 
-MENU = f"""\n1. List all products in store\n2. Show total amount in store\n3. Make an order\n4. Quit
-  """
+MENU = """\n1. List all products in store\n2. Show total amount in store\n3. Make an order\n4. Quit\n"""
 
 
 def print_products(store_obj):
+    """Prints all products in the store with their details."""
     print("------")
     item_number = 0
     for item in store_obj.get_all_products():
@@ -17,6 +17,9 @@ def print_products(store_obj):
 
 
 def start(store_obj):
+    """
+    Starts the store management system.
+    """
     active_product_list = store_obj.get_all_products()
     while True:
         print(MENU)
@@ -27,18 +30,17 @@ def start(store_obj):
 
         except ValueError:
             print("\n****Please Enter A Number Between 1-4****\n")
+            user_choice = 'Void'
 
-        # ----------------------------------------------------------------
         if user_choice == 1:
             print()  # Spacing
             print_products(store_obj)
             print()
-
-        # ----------------------------------------------------------------
+#-----------------------------------------------------------------------------------------
         if user_choice == 2:
             item_count = store_obj.get_total_quantity()
             print(f"\nTotal of {item_count} items in store\n")
-        # ----------------------------------------------------------------
+#-----------------------------------------------------------------------------------------
         if user_choice == 3:
             print_products(store_obj)
             shopping_list = []
@@ -60,17 +62,14 @@ def start(store_obj):
                 try:
                     total_payment = store_obj.order(shopping_list)
                     if total_payment is None:
-
                         print('Sorry Your order has Failed')
 
                 except ValueError:
-                    print("\n***Sorry we dont have enough to fulfil your order***\n")
+                    print("\n***Sorry we don't have enough to fulfill your order***\n")
 
                 else:
-
                     print(f"Order Made! Total Payment: {total_payment}")
-
-        # ------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------
         if user_choice == 4:
             sys.exit('\nThanks For Shopping With Us, Til Next Time BYE\n')
 
@@ -78,6 +77,10 @@ def start(store_obj):
 
 
 def main():
+    """
+    Initializes the store and starts the store management system.
+
+    """
     product_list = [products.Product("MacBook Air M2", price=1450, quantity=100),
                     products.Product("Bose QuietComfort Earbuds", price=250, quantity=500),
                     products.Product("Google Pixel 7", price=500, quantity=250),
@@ -100,8 +103,8 @@ def main():
     try:
         start(best_buy)
     except IndexError:
-        print("This product is not active/ avialable")
+        print("This product is not active/ available")
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

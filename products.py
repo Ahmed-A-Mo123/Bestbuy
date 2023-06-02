@@ -42,9 +42,10 @@ class Product:
     def __init__(self, name, price, quantity, promotion=False, active=True):
         self.name = name
         self.price = float(price)
-        self.quantity = int(quantity)
+        self.quantity = quantity
         self.active = active
         self.promotion = promotion
+        self.offer_name = ''
 
     def get_quantity(self):
         return self.quantity
@@ -95,6 +96,9 @@ class NonStockedProduct(Product):
         super().__init__(name, price, quantity)
         self.quantity = quantity
 
+    def get_quantity(self):
+        return 0
+
     def show(self):
         if self.promotion is False:
             return f"{self.name}, Price: £ {self.price}"
@@ -102,7 +106,6 @@ class NonStockedProduct(Product):
             return f"{self.name}, Price: £ {self.price},Promotion: {self.offer_name}"
 
     def buy(self, quantity):
-        super().buy(self, quantity)
         static_quantity = math.inf  # Not sure how to make it infinite/limitless so used the math module
         self.set_quantity(static_quantity)
         sub_total = self.price * quantity
@@ -121,7 +124,6 @@ class LimitedProduct(Product):
             return f"{self.name}, Price: £ {self.price},Promotion: {self.offer_name}"
 
     def buy(self, quantity):
-        super().buy(self, quantity)
         self.set_quantity(self.maximum)
         if quantity > self.maximum:
             raise ValueError()
