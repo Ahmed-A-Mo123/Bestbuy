@@ -1,17 +1,17 @@
 import store
 import products
 import sys
+import promotions
 
 MENU = f"""\n1. List all products in store\n2. Show total amount in store\n3. Make an order\n4. Quit
   """
 
 
 def print_products(store_obj):
-    active_product_list = store_obj.get_all_products()
-    item_number = 1
     print("------")
-    for i in active_product_list:
-        print(f"{item_number}. {i.show()}")
+    item_number = 0
+    for item in store_obj.get_all_products():
+        print(f'{item_number} ~ {item.show()}')
         item_number += 1
     print("------")
 
@@ -59,17 +59,16 @@ def start(store_obj):
 
                 try:
                     total_payment = store_obj.order(shopping_list)
+                    if total_payment is None:
+
+                        print('Sorry Your order has Failed')
 
                 except ValueError:
                     print("\n***Sorry we dont have enough to fulfil your order***\n")
 
-                if total_payment is None:
-                    print('This Product is out of stock or we dont have enough to fulfil your order')
                 else:
+
                     print(f"Order Made! Total Payment: {total_payment}")
-
-
-
 
         # ------------------------------------------------------------------------
         if user_choice == 4:
@@ -79,12 +78,22 @@ def start(store_obj):
 
 
 def main():
-    # setup initial stock of inventory
-    product_list = [
-        products.Product("MacBook Air M2", price=1450, quantity=100),
-        products.Product("Bose QuietComfort Earbuds", price=250, quantity=500),
-        products.Product("Google Pixel 7", price=500, quantity=250),
-    ]
+    product_list = [products.Product("MacBook Air M2", price=1450, quantity=100),
+                    products.Product("Bose QuietComfort Earbuds", price=250, quantity=500),
+                    products.Product("Google Pixel 7", price=500, quantity=250),
+                    products.NonStockedProduct("Windows License", price=125),
+                    products.LimitedProduct("Shipping", price=10, quantity=250, maximum=1)
+                    ]
+
+    # Create promotion catalog
+    second_half_price = promotions.SecondHalfPrice("Second Half price!")
+    third_one_free = promotions.ThirdOneFree("Third One Free!")
+    thirty_percent = promotions.PercentDiscount("30% off!", percent=30)
+
+    # Add promotions to products
+    product_list[3].set_promotion(second_half_price)
+    product_list[1].set_promotion(third_one_free)
+    product_list[0].set_promotion(thirty_percent)
 
     best_buy = store.Store(product_list)
 

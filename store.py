@@ -24,9 +24,9 @@ class Store:
 
     def order(self, shopping_list):
         total = 0
-        for product, quantity1 in shopping_list:
+        for product, quantity_order in shopping_list:
             try:
-                total += product.buy(quantity1)
+                total += product.buy(quantity_order)
             except ValueError:
                 print(product.name)
                 return None
